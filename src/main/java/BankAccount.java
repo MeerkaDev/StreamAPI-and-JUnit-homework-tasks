@@ -39,4 +39,33 @@ public class BankAccount {
     public String[] getFullName() {
         return new String[]{firstName, secondName};
     }
+
+    public void withdraw(int amount) {
+        if (this.amount == null) {
+            throw new IllegalStateException("Счёт не активирован.");
+        }
+        if (isBlocked) {
+            throw new IllegalStateException("Счёт заблокирован.");
+        }
+        if (amount > this.amount) {
+            throw new IllegalStateException("Нельзя снять больше, чем есть на счете.");
+        }
+        this.amount -= amount;
+    }
+
+    public void transfer(BankAccount otherBankAccount, int transferAmount) {
+        if (otherBankAccount.amount == null) {
+            throw new IllegalStateException("Счёт получателя не активирован.");
+        }
+        if (otherBankAccount.isBlocked) {
+            throw new IllegalStateException("Счёт получателя заблокирован.");
+        }
+
+        withdraw(transferAmount);
+        otherBankAccount.setAmount(otherBankAccount.getAmount() + transferAmount);
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
 }
